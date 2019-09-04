@@ -27,6 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <cmath>
 #include <OgreColourValue.h>
 #include <OgreMatrix4.h>
 #include <OgreVector3.h>
@@ -114,8 +115,10 @@ bool IntensityPCTransformer::transform( const sensor_msgs::PointCloud2ConstPtr& 
     for( uint32_t i = 0; i < num_points; ++i )
     {
       float val = valueFromCloud<float>(cloud, offset, type, point_step, i);
-      min_intensity = std::min(val, min_intensity);
-      max_intensity = std::max(val, max_intensity);
+      if(!std::isnan(val)){
+        min_intensity = std::min(val, min_intensity);
+        max_intensity = std::max(val, max_intensity);
+      }
     }
 
     min_intensity = std::max(-999999.0f, min_intensity);
